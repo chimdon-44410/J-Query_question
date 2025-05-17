@@ -51,15 +51,17 @@
   <script>
 
     // 関数化して書いたコード
-    function slideStop() {
-      $('li').children('.menu__list__childList').stop(false, true);
-    }
+    // function slideStop() {
+    //   $('li').children('.menu__list__childList').stop(false, true);
+    // }
 
     $(function () {
       $('.menu__list > li').hover(function () {
+        // slideStop();
         $(this).children('.menu__list__childList').stop(true, true).slideDown(400);
       },
         function () {
+          // slideStop();
           $(this).children('.menu__list__childList').stop(true, true).slideUp(400);
         });
     });

@@ -90,24 +90,37 @@
 
       function filterList() {
         let selectedValue = $('.select').val();
-      
-      $('.list li').each(function (index, element) {
-        let category = $(element).data('category-type');
-        if (selectedValue === 'all' || selectedValue === category) {
-        $(element).show();
-      } else {
-        $(element).hide();
+
+        if (selectedValue === 'all'){
+          $('.list li').show()
+        } else {
+          $('.list li').each(function (index, element) {
+            let category = $(element).data('category-type');
+            if (selectedValue === category) {
+              $(element).show();
+            } else {
+              $(element).hide();
+            }
+          });
+        }
+
+        // $('.list li').each(function (index, element) {
+        //   let category = $(element).data('category-type');
+        //   if (selectedValue === category) {
+        //     $(element).show();
+        //   } else {
+        //     $(element).hide();
+        //   }
+        // });
       }
+
+
+
+      $('.select').change(function () {
+        filterList();
+      });
+
     });
-  }
-
-
-
-    $('.select').change(function (){
-      filterList();
-    });
-    
-  });
 
     // 今回やるのはフィルタリング機能です。
     // selectボックスをクリックして言語を選び、その言語と関係のあるリストだけが表示されるプログラムです。
@@ -126,4 +139,5 @@
     // eachには引数を二つ持たせることができ、第一引数はDOM要素のインデックス番号、第二引数ではDOM要素自体が取得できます
   </script>
 </body>
+
 </html>

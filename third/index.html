@@ -30,16 +30,14 @@
   </div>
   <script src="../../common/js/jquery.js"></script>
   <script>
-    $(function () {
-      $('.nav').children('li').on('click', function () {
-        $('.contents').children('li').addClass('is-hidden');
-        
-        $('.nav li','.contents li').removeClass('is-hidden');
-
-        let index = $('.nav').children('li').index(this);
-        $('.contents li').eq(index).removeClass('is-hidden');
-      });
+   
+  $(function () {
+    $('.nav').children('li').on('click', function () {
+      let index = $(this).index();
+      $('.contents').children('li').addClass('is-hidden');
+      $('.contents').children('li').eq(index).removeClass('is-hidden');
     });
+  });
 
 
     // 今回やるのはタブメニューです。
