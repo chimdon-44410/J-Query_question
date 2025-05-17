@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../common/css/reset.css">
+  <link rel="stylesheet" href="../../common/css/base.css">
+  <link rel="stylesheet" href="./css/style.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="wrapper" id="wrapper">
+    <button type="button" class="btn search-btn" id="pokemon_search">ポケモンを探す</button>
+  </div>
+
+  <script src="../../common/js/jquery.js"></script>
+  <script>
+
+    $(function () {
+      let wrapper = $('#wrapper');
+
+      let initialBtn = '<button type="button" class="btn search-btn" id="pokemon_search">ポケモンを探す</button>';
+
+      let failHtml = `
+        <p class="text">逃げられてしまった...</p>
+        <button class="btn mt" data-js="reset">戻る</button>
+      `;
+
+
+      let encountHtml = `
+        <p class="name"></p>
+        <div>
+          <img class="img" src="" alt="">
+        </div>
+        <div>
+          <button class="btn" id="catch">捕まえる</button>
+          <button class="btn" data-js="reset">逃げる</button>
+        </div>
+      `;
+
+
+      let doneHtml = `
+        <p class="name">ゲットしました</p>
+        <div>
+          <img class="img" src="" alt="">
+        </div>
+        <button class="btn" data-js="reset">戻る</button>
+      `;
+
+      wrapper.html(initialBtn);
+
+
+      wrapper.on('click', '#pokemon_search', function () {
+        let randomId = Math.floor(Math.random() * 151) + 1;
+
+        $.ajax({
+          url: `https://pokeapi.co/api/v2/pokemon/${randomId}`,
+          method: 'GET'
+        }).done(function (res) {
+          wrapper.html(encountHtml);
+          $('.name').text(res.name);
+          $('.img').attr('src', res.sprites.front_default);
+
+          $.ajax({
+            url: res.species.url,
+            method: 'GET'
+          }).done(function (speciesRes) {
+            console.log(speciesRes);
+
+            // (宿題)同期と非同期の違い
+            // 同期処理→処理が順番に実行され、
+            //           前の処理が終わるまで次の処理が待機状態になる。
+            //           処理がシンプルだけど処理時間の遅延が全体のパフォーマンスに影響する可能性がある。
+
+            // 非同期処理→複数の処理が並行して実行される。
+            //             処理の完了を待たずに次の処理に進む。
+            //             複雑だけど処理の待ち時間を減らして、全体的なパフォーマンスを向上させることができる。
+            let jpName = speciesRes.names.find(name => name.language.name === 'ja');
+            $('.name').text(jpName ? jpName.name : res.name);
+          });
+
+
+        }).fail(function (err) {
+          wrapper.html(initialBtn);
+        });
+      });
+
+
+      wrapper.on('click', '#catch', function () {
+        let success = Math.random() < 0.5;
+        if (success) {
+          wrapper.html(doneHtml);
+        } else {
+          wrapper.html(failHtml);
+        }
+      });
+
+      wrapper.on('click', '[data-js="reset"]', function () {
+        wrapper.html(initialBtn);
+      });
+    });
+
+
+
+
+
+  </script>
+</body>
+
+</html>
